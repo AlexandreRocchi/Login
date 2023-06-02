@@ -5,9 +5,11 @@ session_start();
 require_once('../src/lib/database.php');
 require_once('../src/controllers/AddUser.php');
 require_once('../src/controllers/IsUser.php');
+require_once('../src/controllers/ResetPassword.php');
 
 use Login\Controllers\AddUser;
 use Login\Controllers\IsUser;
+use Login\Controllers\ResetPassword;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Vérifier si l'action est une tentative de connexion
@@ -19,6 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif (isset($_POST['register'])) {
         $addUser = new AddUser();
         $addUser->addUser();
+    }
+    // Vérifier si l'action est une demande de réinitialisation de mot de passe
+    elseif (isset($_POST['resetpwd'])) {
+        $resetPassword = new ResetPassword();
+        $resetPassword->resetPassword();
     }
 }
 ?>
@@ -50,5 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br>
         <input type="submit" name="register" value="S'inscrire">
     </form>
+
+    <h1>Mot de passe oublié ?</h1>
+    <form method="POST" action="">
+        <label for="email">Adresse e-mail:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <input type="submit" name="resetpwd" value="Envoyer">
+    </form>
+
 </body>
 </html>
