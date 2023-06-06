@@ -2,9 +2,13 @@
 
     namespace Login\Controllers;
 
-    require_once('../src/lib/database.php');
+    require_once('../src/models/Database.php');
+    require_once('../src/controllers/AntiBruteForce.php');
+    require_once('../src/controllers/ResetBruteForce.php');
 
     use Login\Lib\DataBase\DatabaseConnection;
+    use Login\Controllers\AntiBruteForce;
+    use Login\Controllers\ResetBruteForce;
 
     class IsUser
     {
@@ -12,7 +16,7 @@
         {
             $database = new DatabaseConnection();
             $database = $database->getConnection();
-    
+        
             $email = $_POST['email'];
             $pwd = $_POST['pwd'];
     
@@ -26,21 +30,20 @@
             $account = $query->fetch();
     
             if ($account === false) {
-                header('Location: ../templates/index.php');
+                echo 'Mauvais identifiant ou mot de passe !';
             } else {
+                if (AntiBruteForce::antiBruteforce() === false) {
+                    echo 'Trop de tentatives de connexion !';
+                    return;
+                }
                 $hashedPwd = hash('sha512', $pwd);
-    
                 if ($hashedPwd === $account['password']) {
+                    ResetBruteForce::resetBruteForce();
                     $_SESSION['user'] = $account['guid'];
-                    echo 'You are logged in ' . $email;
-                    // header('Location: ../src/controllers/Session.php');
+                    $_SESSION['email'] = $email;
+                        header('Location: Session.php');
                 } else {
-                    echo $hashedPwd;
-                    echo '<br>';
-                    echo $account['password'];
-                    // header('Location: /Login.php');
-                    echo '<br>';
-                    echo 'Wrong password';
+                    echo 'Mauvais identifiant ou mot de passe !';
                 }
             }
         }
