@@ -4,15 +4,16 @@ USE `users`;
 
 -- Table pour les utilisateurs
 CREATE TABLE IF NOT EXISTS `user` (
-  `guid` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `guid` INT(11) PRIMARY KEY,
   `email` VARCHAR(128) NOT NULL
 );
 
 -- Table pour les comptes d'utilisateur
 CREATE TABLE IF NOT EXISTS `account` (
-  `guid` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `guid` INT(11) PRIMARY KEY,
   `password` VARCHAR(128) NOT NULL,
-  `salt` VARCHAR(128) NOT NULL
+  `salt` VARCHAR(128) NOT NULL,
+  `strech` INT(11) NOT NULL DEFAULT '1000'
 );
 
 -- Table pour les comptes d'utilisateur
@@ -24,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `accountotp` (
 
 -- Table pour le nombre de tentative de connexion d'un utilisateur
 CREATE TABLE IF NOT EXISTS `accountattempt` (
-  `guid` INT(11),
+  `guid` INT(11) PRIMARY KEY,
   `time` INT(11) NOT NULL
 );
 

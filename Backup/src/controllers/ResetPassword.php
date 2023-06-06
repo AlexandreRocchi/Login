@@ -10,14 +10,15 @@
     {
         public function resetPassword(): void
         {
-            // ini_set('SMTP', 'login@php.com');
-            // ini_set('smtp_port', 25);
 
             $database = new DatabaseConnection();
             $database = $database->getConnection();
         
             $email = $_POST['email'];
 
+            // Configuration pour envoyer un email 
+            // ini_set('SMTP', 'login@php.com');
+            // ini_set('smtp_port', 587);
             // $subject = 'Réinitialisation de votre mot de passe';
             // $message = 'Bonjour';
             // $headers = "From: login@php.com" . "\r\n";
