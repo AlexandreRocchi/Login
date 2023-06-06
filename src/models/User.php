@@ -2,7 +2,7 @@
 
     namespace Login\Controllers;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
 
     use Login\Lib\DataBase\DatabaseConnection;
 

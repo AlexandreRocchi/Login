@@ -2,36 +2,22 @@
 
     namespace Login\Controllers;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
+    require_once('./src/models/User.php');
+    require_once('./src/models/Account.php');
 
     use Login\Lib\DataBase\DatabaseConnection;
+    use Login\Lib\Models\User;
+    use Login\Lib\Models\Account;
 
-    class EmailController
+    class EmailController 
     {
-        public function confirmEmail(): void
-        {
-            $database = new DatabaseConnection();
-            $database = $database->getConnection();
-
-            $otp = $_POST['otp'];
-            $email = $_SESSION['email'];
-            
-            $query = $database->prepare('SELECT guid FROM user WHERE email = :email');
-            $query->bindParam(':email', $email);
-            $query->execute();
-            $guid = $query->fetch();
-
-            $query = $database->prepare('SELECT otp FROM accountotp WHERE guid = :guid ORDER BY validity DESC LIMIT 1');
-            $query->bindParam(':guid', $guid['guid']);
-            $query->execute();
-            $otpdb = $query->fetch();
-
-            if ($otp == $otpdb['otp']) {
-                $_SESSION['guid'] = $guid['guid'];
-                header('Location: Change.php');
-            } else {
-                echo 'Code de confirmation incorrect';
-            }
+        public function confirmEmail() {
+            // Logique pour traiter la confirmation de l'adresse e-mail
+            // Utilise le modèle User.php et la vue ConfirmEmail.php
+           
         }
+    
+        
     }
 ?>

@@ -1,22 +1,3 @@
-<?php
-
-session_start();
-
-require_once('../src/models/Database.php');
-require_once('../src/controllers/ResetPassword.php');
-
-
-use Login\Controllers\ResetPassword;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Vérifier si l'action est une demande de réinitialisation de mot de passe
-    if (isset($_POST['resetpwd'])) {
-        $resetPassword = new ResetPassword();
-        $resetPassword->resetPassword();
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>

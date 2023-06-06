@@ -2,43 +2,25 @@
 
     namespace Login\Controllers;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
+    require_once('./src/models/User.php');
+    require_once('./src/models/Account.php');
 
     use Login\Lib\DataBase\DatabaseConnection;
+    use Login\Lib\Models\User;
+    use Login\Lib\Models\Account;
 
-    class AcountController
+    class AccountController 
     {
-        public function deleteAccount(): void
-        {
-            $database = new DatabaseConnection();
-            $database = $database->getConnection();
-
-            $email = $_SESSION['email'];
-
-            $query = $database->prepare('SELECT guid FROM user WHERE email = :email');
-            $query->bindParam(':email', $email);
-            $query->execute();
-            $guid = $query->fetch();
-            $guid = $guid['guid'];
-
-            $query = $database->prepare('DELETE FROM user WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-
-            $query = $database->prepare('DELETE FROM accountattempt WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-
-            $query = $database->prepare('DELETE FROM account WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-
-            $query = $database->prepare('DELETE FROM accountotp WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-
-            header('Location: Register.php');
-
+        public function index() {
+            // Logique pour afficher la page du compte utilisateur
+            // Utilise le modèle User.php et Account.php ainsi que la vue ChangePassword.php (Session.php?)
+        }
+    
+        public function changePassword() {
+            // Logique pour traiter la modification du mot de passe
+            // Utilise le modèle User.php et Account.php ainsi que la vue ChangePassword.php
+           
         }
     }
 ?>

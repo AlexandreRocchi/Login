@@ -1,21 +1,3 @@
-<?php
-
-session_start();
-
-require_once('../src/models/Database.php');
-require_once('../src/controllers/ChangePassword.php');
-
-use Login\Controllers\ChangePassword;
-use Login\Lib\Database\DatabaseConnection;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['change'])) {
-        $confirmEmail = new ChangePassword();
-        $confirmEmail->changePassword();
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>

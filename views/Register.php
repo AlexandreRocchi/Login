@@ -1,23 +1,3 @@
-<?php
-
-session_start();
-
-require_once('../src/models/Database.php');
-require_once('../src/models/User.php');
-
-
-use Login\Lib\DataBase\DatabaseConnection;
-use Login\Lib\Models\User;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Vérifier si l'action est une tentative d'ajout d'utilisateur
-    if (isset($_POST['register'])) {
-        $addUser = new AddUser();
-        $addUser->addUser();
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>

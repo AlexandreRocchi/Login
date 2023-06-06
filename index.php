@@ -1,63 +1,60 @@
 <?php
 
-// Inclusion des fichiers nécessaires
-require_once '../src/controllers/UserController.php';
-require_once '../src/controllers/SecurityController.php';
-require_once '../src/controllers/PasswordController.php';
-require_once '../src/controllers/AccountController.php';
-require_once '../src/controllers/EmailController.php';
-require_once '../src/controllers/TwoFactorController.php';
-require_once '../src/controllers/LoginAttemptsController.php';
-require_once '../src/models/Database.php';
+// Inclure les fichiers des contrôleurs
+// require_once 'controllers/AccountController.php';
+require_once './src/controllers/AuthController.php';
+// require_once 'controllers/EmailController.php';
+// require_once 'controllers/PasswordController.php';
 
-// Activation de certaines mesures de sécurité
-session_start();
-ini_set('display_errors', 0);
+// use Login\Controllers\AccountController;
+use Login\Controllers\AuthController;
+// use Login\Controllers\EmailController;
+// use Login\Controllers\PasswordController;
+// use Login\Lib\DataBase\DatabaseConnection;
 
-// Création de l'instance de connexion à la base de données
-$db = new Database();
 
-// Création des instances des contrôleurs
-$userController = new UserController();
-$securityController = new SecurityController();
-$passwordController = new PasswordController();
-$accountController = new AccountController();
-$emailController = new EmailController();
-$twoFactorController = new TwoFactorController();
-$loginAttemptsController = new LoginAttemptsController();
+// Instancier les contrôleurs
+// $accountController = new AccountController();
+$authController = new AuthController();
+// $emailController = new EmailController();
+// $passwordController = new PasswordController();
 
-// Récupération de l'action depuis l'URL en utilisant la méthode POST pour plus de sécurité
-$action = isset($_POST['action']) ? $_POST['action'] : '';
 
-// Routage des différentes actions
-switch ($action) {
-  case 'register':
-    $userController->register();
-    break;
-  case 'login':
-    $userController->login();
-    break;
-  case 'logout':
-    $userController->logout();
-    break;
-  case 'change':
-    $userController->change();
-    break;
-  case 'confirm':
-    $userController->confirm();
-    break;
-  case 'delete':
-    $userController->delete();
-    break;
-  case 'enable-2fa':
-    $twoFactorController->enableTwoFactor();
-    break;
-  case 'disable-2fa':
-    $twoFactorController->disableTwoFactor();
-    break;
-  // Autres actions spécifiques à votre application...
-  default:
-    // Action par défaut, page d'accueil ou gestion des erreurs
-    echo 'Page not found';
-    break;
+// Obtenir le chemin demandé dans l'URL
+$path = $_SERVER['REQUEST_URI'];
+
+// Aiguiller les requêtes en fonction du chemin
+switch ($path) {
+    // Routes pour le contrôleur AccountController
+    case '/account':
+        $accountController->index();
+        break;
+    case '/account/change-password':
+        $accountController->changePassword();
+        break;
+
+    // Routes pour le contrôleur AuthController
+    case '/login':
+        $authController->login();
+        break;
+    case '/register':
+        $authController->register();
+        break;
+
+    // Routes pour le contrôleur EmailController
+    case '/confirm-email':
+        $emailController->confirmEmail();
+        break;
+
+    // Routes pour le contrôleur PasswordController
+    case '/reset-password':
+        $passwordController->resetPassword();
+        break;
+
+    // Autres routes...
+
+    default:
+        // Gérer les routes non définies
+        break;
 }
+?>
