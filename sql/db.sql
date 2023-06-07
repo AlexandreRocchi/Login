@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `accountotp` (
 
 -- Table pour le nombre de tentative de connexion d'un utilisateur
 CREATE TABLE IF NOT EXISTS `accountattempt` (
-  `guid` INT(11) PRIMARY KEY,
-  `query_time` DATETIME NOT NULL,
+  `guid` INT(11),
+  `time` DATETIME NOT NULL
 );
 
 

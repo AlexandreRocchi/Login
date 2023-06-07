@@ -10,9 +10,9 @@
     use Login\src\models\User;
     use Login\src\Models\Otp;
 
-    class ConfirmEmailController 
+    class ConfirmOtpController 
     {
-        public function confirmEmail() 
+        public function confirmOtp() 
         {
             
         }

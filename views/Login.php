@@ -15,6 +15,5 @@
         <input type="submit" name="login" value="Se connecter">
     </form>
     <p>Pas encore inscrit ? <a href="/Login/index.php/register">Inscrivez-vous</a></p>
-    <p>Mot de passe oublié ? <a href="/Login/index.php/reset-password">Réinitialisez-le</a></p>
 </body>
 </html>

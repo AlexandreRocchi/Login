@@ -16,5 +16,8 @@
         <input type="submit" name="change" value="Appliquer">
         <p>Attention ! Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre, un caractère spécial et faire au moins 12 caractères.</p>
     </form>
+    <a href="/Login/index.php/account">Retour</a>
+
+
 </body>
 </html>

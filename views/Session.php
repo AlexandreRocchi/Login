@@ -5,15 +5,15 @@
 </head>
 <body>
     <form method="POST" action="">
-        <p>Voulez vous supprimer ce compte ?</p>
+        <p>Voulez-vous vous supprimer ce compte ?</p>
         <input type="submit" name="delete" value="Confirmer">
     </form>
     <form method="POST" action="">
-        <p>Voulez changer de mot de passe ?</p>
+        <p>Voulez-vous vous changer de mot de passe ?</p>
         <input type="submit" name="reset" value="Confirmer">
     </form>
     <form method="POST" action="">
-        <p>Voulez vous déconnecter ?</p>
+        <p>Voulez-vous vous déconnecter ?</p>
         <input type="submit" name="logout" value="Confirmer">
     </form>
 </body>

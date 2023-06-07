@@ -2,7 +2,7 @@
 
     namespace Login\src\Models;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
 
     use Login\src\Models\DatabaseConnection;
 
@@ -14,10 +14,8 @@
 
         public DatabaseConnection $database;
 
-        public function __construct($guid,$time, $database)
+        public function __construct($database)
         {
-            $this->guid = $guid;
-            $this->time = $time;
             $this->database = $database;
         }
         
@@ -26,7 +24,7 @@
             return $this->database;
         }
 
-        public function getGuid(): int
+        public function getGuid(): string
         {
             return $this->guid;
         }
@@ -36,7 +34,7 @@
             return $this->time;
         }
 
-        public function setGuid(int $guid): void
+        public function setGuid(string $guid): void
         {
             $this->guid = $guid;
         }
@@ -46,53 +44,34 @@
             $this->time = $time;
         }
 
-        public function getTimeFromGuid(int $guid): int
+        public function addAttempt(string $guid): void
         {
-            $query = $this->database->prepare('SELECT time FROM accountattempt WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-
-            $time = $query->fetch();
-
-            return $time;
-        }
-
-        public function initAttempt(int $guid): void
-        {
-            $query = $this->database->prepare('INSERT INTO accountattempt (guid, time) VALUES (:guid, 0)');
+            $query = $this->database->getConnection()->prepare('INSERT INTO accountattempt (guid, time) VALUES (:guid, NOW())');
             $query->bindParam(':guid', $guid);
             $query->execute();
         }
 
-        public function addAttempt(int $guid, $time): void
+        public function resetAttempt(string $guid): void
         {
-            $time++;
-            $query = $this->database->prepare('UPDATE accountattempt SET time = :time WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('DELETE FROM accountattempt WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
-            $query->bindParam(':time', $time);
             $query->execute();
         }
 
-        public function isBruteForce(int $guid): bool
+        public function isBruteForce(string $guid): bool
         {
-            $query = $this->database->prepare('SELECT time FROM accountattempt WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('SELECT COUNT(*) as attempts FROM accountattempt WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
-
-            $time = $query->fetch();
-
-            if ($time >= 5) {
+        
+            $result = $query->fetch();
+            $attempts = $result['attempts'];
+        
+            if ($attempts >= 5) {
                 return true;
             } else {
                 return false;
             }
-        }
-
-        public function resetAttempt(int $guid): void
-        {
-            $query = $this->database->prepare('UPDATE accountattempt SET time = 0 WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
         }
     }
 ?>
