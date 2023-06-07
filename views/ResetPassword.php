@@ -4,13 +4,17 @@
     <title>Page de réinitialisation</title>
 </head>
 <body>
-    <h1>Mot de passe oublié ?</h1>
+
+    <h3>Changer le mot de passe  :</h3>
     <form method="POST" action="">
-        <label for="email">Adresse e-mail:</label>
-        <input type="email" id="email" name="email" required>
+        <label for="email">Ancien mot de passe :</label>
+        <input type="password" id="oldpwd" name="oldpwd" required>
         <br>
-        <input type="submit" name="resetpassword" value="Envoyer">
+        <label for="pwd">Nouveau mot de passe:</label>
+        <input type="password" id="pwd" name="pwd" required>
+        <br>
+        <input type="submit" name="change" value="Appliquer">
+        <p>Attention ! Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre, un caractère spécial et faire au moins 12 caractères.</p>
     </form>
-    <p>Vous mémoire vous reviens ? <a href="/Login/index.php/login">Connectez-vous</a></p>
 </body>
 </html>

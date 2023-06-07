@@ -5,13 +5,11 @@ require_once './src/controllers/RegisterController.php';
 require_once './src/controllers/LoginController.php';
 require_once './src/controllers/AccountController.php';
 require_once './src/controllers/ResetPasswordController.php';
-require_once './src/controllers/ConfirmEmailController.php';
 
 use Login\Controllers\RegisterController;
 use Login\Controllers\LoginController;
 use Login\Controllers\AccountController;
 use Login\Controllers\ResetPasswordController;
-use Login\Controllers\ConfirmEmailController;
 
 
 // Instancier les contrôleurs
@@ -19,7 +17,6 @@ $registerController = new RegisterController();
 $loginController = new LoginController();
 $accountController = new AccountController();
 $passwordController = new ResetPasswordController();
-$emailController = new ConfirmEmailController();
 
 
 

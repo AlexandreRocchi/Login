@@ -9,6 +9,10 @@
         <input type="submit" name="delete" value="Confirmer">
     </form>
     <form method="POST" action="">
+        <p>Voulez changer de mot de passe ?</p>
+        <input type="submit" name="reset" value="Confirmer">
+    </form>
+    <form method="POST" action="">
         <p>Voulez vous déconnecter ?</p>
         <input type="submit" name="logout" value="Confirmer">
     </form>

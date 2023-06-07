@@ -37,10 +37,14 @@
                 session_destroy();
                 header('Location: login');
             }
+
             if (isset($_POST['logout'])) {
                 session_destroy();
                 header('Location: login');
-                }
+             }
+            if (isset($_POST['reset'])) {
+                header('Location: reset-password');
+            }
             }
         }
 ?>

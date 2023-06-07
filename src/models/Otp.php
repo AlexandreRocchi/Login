@@ -53,7 +53,7 @@
 
         public function getOtpFromGuid(int $guid): string
         {
-            $query = $this->database->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
 
@@ -63,7 +63,7 @@
         }
         public function insertOtp(): void
         {
-            $query = $this->database->prepare('INSERT INTO accountotp (guid, otp) VALUES (:guid, :otp)');
+            $query = $this->database->getConnection()->prepare('INSERT INTO accountotp (guid, otp) VALUES (:guid, :otp)');
             $query->bindParam(':guid', $this->guid);
             $query->bindParam(':otp', $this->otp);
             $query->execute();
@@ -71,7 +71,7 @@
 
         public function displayOtp(): void
         {
-            $query = $this->database->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
             $query->bindParam(':guid', $this->guid);
             $query->execute();
 
