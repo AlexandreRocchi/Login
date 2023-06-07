@@ -16,9 +16,8 @@
 
         public DatabaseConnection $database;
 
-        public function __construct($password, $database)
+        public function __construct($database)
         {
-            $this->password = $password;
             $this->database = $database;
         }
 

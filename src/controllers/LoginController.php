@@ -22,11 +22,12 @@
 
                 $email = $_POST['email'];
                 $password = $_POST['password'];
+                
                 $database = new DatabaseConnection();
                 $database->getConnection();
 
                 $user = new User($email, $database);
-                $account = new Account( $password, $database);
+                $account = new Account($database);
 
                 if ($user->isEmail($email) === false) {
                     echo "Adresse e-mail invalide !";

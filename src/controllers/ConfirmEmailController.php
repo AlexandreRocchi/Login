@@ -8,16 +8,13 @@
 
     use Login\src\DataBase\DatabaseConnection;
     use Login\src\models\User;
-    use Login\src\Models\Account;
+    use Login\src\Models\Otp;
 
-    class EmailController 
+    class ConfirmEmailController 
     {
-        public function confirmEmail() {
-            // Logique pour traiter la confirmation de l'adresse e-mail
-            // Utilise le modèle User.php et la vue ConfirmEmail.php
-           
+        public function confirmEmail() 
+        {
+            
         }
-    
-        
     }
 ?>

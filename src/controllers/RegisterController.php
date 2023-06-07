@@ -15,18 +15,17 @@
         
         public function register() {
             require_once('./views/Register.php');
-
             if (isset($_POST['register'])) {
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 // Trouve une solution
                 $guid = "";
                 $salt = "";
+                
                 $database = new DatabaseConnection();
-                $database->getConnection();
 
-                $user = new User($guid, $email, $database);
-                $account = new Account($guid, $password, $salt, $database);
+                $user = new User($email, $database);
+                $account = new Account($database);
 
                 $guid = $user->generateGuid();
                 $salt = $account->generateSalt();

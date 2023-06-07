@@ -2,7 +2,7 @@
 
     namespace Login\src\Models;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
 
     use Login\src\Models\DatabaseConnection;
 
@@ -14,10 +14,8 @@
 
         public DatabaseConnection $database;
 
-        public function __construct($guid,$otp, $database)
+        public function __construct($database)
         {
-            $this->guid = $guid;
-            $this->otp = $otp;
             $this->database = $database;
         }
         
@@ -62,6 +60,13 @@
             $otp = $query->fetch();
 
             return $otp['otp'];
+        }
+        public function insertOtp(): void
+        {
+            $query = $this->database->prepare('INSERT INTO accountotp (guid, otp) VALUES (:guid, :otp)');
+            $query->bindParam(':guid', $this->guid);
+            $query->bindParam(':otp', $this->otp);
+            $query->execute();
         }
 
         public function displayOtp(): void

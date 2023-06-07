@@ -13,18 +13,34 @@
     class AccountController 
     {
         public function session() {
-            echo "Bienvenue sur votre compte " . $_SESSION['email'] . " !";
-
-            require_once('./views/Session.php');
+            if (isset($_SESSION['email'])) {
+                echo "Bienvenue sur votre compte " . $_SESSION['email'] . " !";
+                $email = $_SESSION['email'];
+                require_once('./views/Session.php');
+            } else {
+                header('Location: login');
+            }
 
             if (isset($_POST['delete'])) {
-                
-            }
-            
-            if (isset($_POST['logout'])) {
+                $email = $_SESSION['email'];
+
+                $database = new DatabaseConnection();
+                $database->getConnection();
+
+                $user = new User($email, $database);
+                $account = new Account($database);
+
+                $user->setGuid($user->getGuidFromEmail($email));
+
+                $user->deleteUser($email);
+                $account->deleteAccount($user->getGuid());
                 session_destroy();
                 header('Location: login');
             }
+            if (isset($_POST['logout'])) {
+                session_destroy();
+                header('Location: login');
+                }
+            }
         }
-    }
 ?>

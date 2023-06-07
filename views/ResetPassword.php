@@ -9,8 +9,8 @@
         <label for="email">Adresse e-mail:</label>
         <input type="email" id="email" name="email" required>
         <br>
-        <input type="submit" name="resetpwd" value="Envoyer">
+        <input type="submit" name="resetpassword" value="Envoyer">
     </form>
-    <p>Vous mémoire vous reviens ? <a href="Login.php">Connectez-vous</a></p>
+    <p>Vous mémoire vous reviens ? <a href="/Login/index.php/login">Connectez-vous</a></p>
 </body>
 </html>

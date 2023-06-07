@@ -12,7 +12,7 @@
 
         public string $email;
 
-        public  DatabaseConnection $database;
+        public DatabaseConnection $database;
 
         public function __construct($email, $database)
         {
