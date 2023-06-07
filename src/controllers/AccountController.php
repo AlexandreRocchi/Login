@@ -1,26 +1,30 @@
 <?php
 
-    namespace Login\Controllers;
+    namespace Login\Controllers;    
 
     require_once('./src/models/Database.php');
     require_once('./src/models/User.php');
     require_once('./src/models/Account.php');
 
-    use Login\Lib\DataBase\DatabaseConnection;
-    use Login\Lib\Models\User;
-    use Login\Lib\Models\Account;
+    use Login\src\Models\DatabaseConnection;
+    use Login\src\Models\User;
+    use Login\src\Models\Account;
 
     class AccountController 
     {
-        public function index() {
-            // Logique pour afficher la page du compte utilisateur
-            // Utilise le modèle User.php et Account.php ainsi que la vue ChangePassword.php (Session.php?)
-        }
-    
-        public function changePassword() {
-            // Logique pour traiter la modification du mot de passe
-            // Utilise le modèle User.php et Account.php ainsi que la vue ChangePassword.php
-           
+        public function session() {
+            echo "Bienvenue sur votre compte " . $_SESSION['email'] . " !";
+
+            require_once('./views/Session.php');
+
+            if (isset($_POST['delete'])) {
+                
+            }
+            
+            if (isset($_POST['logout'])) {
+                session_destroy();
+                header('Location: login');
+            }
         }
     }
 ?>

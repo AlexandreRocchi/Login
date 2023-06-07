@@ -1,22 +1,21 @@
 <?php
 
-    namespace Login\Controllers;
+    namespace Login\src\Models;
 
     require_once('./src/models/Database.php');
 
-    use Login\Lib\DataBase\DatabaseConnection;
+    use Login\src\Models\DatabaseConnection;
 
     class User
     {
-        public int $guid;
+        public string $guid;
 
         public string $email;
 
         public  DatabaseConnection $database;
 
-        public function __construct($guid, $email, $database)
+        public function __construct($email, $database)
         {
-            $this->guid = $guid;
             $this->email = $email;
             $this->database = $database;
         }
@@ -26,7 +25,7 @@
             return $this->database;
         }
 
-        public function getGuid(): int
+        public function getGuid(): string
         {
             return $this->guid;
         }
@@ -36,7 +35,7 @@
             return $this->email;
         }
 
-        public function setGuid(int $guid): void
+        public function setGuid(string $guid): void
         {
             $this->guid = $guid;
         }
@@ -46,16 +45,16 @@
             $this->email = $email;
         }
 
-        public function generateGuid(): int
+        public function generateGuid(): string
         {
             $guid = com_create_guid();
 
             return $guid;
         }
 
-        public function getGuidFromEmail(string $email): int
+        public function getGuidFromEmail(string $email): string
         {
-            $query = $this->database->prepare('SELECT guid FROM user WHERE email = :email');
+            $query = $this->database->getConnection()->prepare('SELECT guid FROM user WHERE email = :email');
             $query->bindParam(':email', $email);
             $query->execute();
             $guid = $query->fetch();
@@ -64,9 +63,9 @@
             return $guid;
         }
 
-        public function getEmailFromGuid(int $guid): string
+        public function getEmailFromGuid(string $guid): string
         {
-            $query = $this->database->prepare('SELECT email FROM user WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('SELECT email FROM user WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
             $email = $query->fetch();
@@ -75,15 +74,13 @@
             return $email;
         }
         
-        public function isGuid(int $guid): bool
+        public function isGuid(string $guid): bool
         {
-            $query = $this->database->prepare('SELECT guid FROM user WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('SELECT guid FROM user WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
-            $guid = $query->fetch();
-            $guid = $guid['guid'];
 
-            if ($guid == $guid) {
+            if ($query->rowCount() > 0) {
                 return true;
             } else {
                 return false;
@@ -92,22 +89,20 @@
 
         public function isEmail(string $email): bool
         {
-            $query = $this->database->prepare('SELECT email FROM user WHERE email = :email');
+            $query = $this->database->getConnection()->prepare('SELECT email FROM user WHERE email = :email');
             $query->bindParam(':email', $email);
-            $query->execute();
-            $email = $query->fetch();
-            $email = $email['email'];
+            $query->execute();;
 
-            if ($email == $email) {
+            if ($query->rowCount() > 0) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        public function addUser(int $guid, string $email): void
+        public function addUser(string $guid, string $email): void
         {
-            $query = $this->database->prepare('INSERT INTO user (email) VALUES (:email)');
+            $query = $this->database->getConnection()->prepare('INSERT INTO user (guid, email) VALUES (:guid, :email)');
             $query->bindParam(':guid', $guid);
             $query->bindParam(':email', $email);
             $query->execute();
@@ -115,20 +110,14 @@
 
         public function deleteUser(string $email): void
         {
-            $query = $this->database->prepare('DELETE FROM user WHERE email = :email');
+            $query = $this->database->getConnection()->prepare('DELETE FROM user WHERE email = :email');
             $query->bindParam(':email', $email);
             $query->execute();
         }
 
-        public function isUser(string $email): bool
+        public function verifEmail(string $email): bool
         {
-            $query = $this->database->prepare('SELECT email FROM user WHERE email = :email');
-            $query->bindParam(':email', $email);
-            $query->execute();
-            $email = $query->fetch();
-            $email = $email['email'];
-
-            if ($email == $email) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return true;
             } else {
                 return false;

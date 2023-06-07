@@ -9,8 +9,8 @@
         <label for="email">Adresse e-mail:</label>
         <input type="email" id="email" name="email" >
         <br>
-        <label for="pwd">Mot de passe:</label>
-        <input type="password" id="pwd" name="pwd" >
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" name="password" >
         <br>
         <input type="submit" name="register" value="S'inscrire">
     </form>

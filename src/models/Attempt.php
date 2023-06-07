@@ -1,14 +1,14 @@
 <?php
 
-    namespace Login\Controllers;
+    namespace Login\src\Models;
 
     require_once('../src/models/Database.php');
 
-    use Login\Lib\DataBase\DatabaseConnection;
+    use Login\src\Models\DatabaseConnection;
 
     class Attempt
     {
-        public int $guid;
+        public string $guid;
 
         public string $time;
 

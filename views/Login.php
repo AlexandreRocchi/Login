@@ -9,8 +9,8 @@
         <label for="email">Adresse e-mail:</label>
         <input type="email" id="email" name="email" required>
         <br>
-        <label for="pwd">Mot de passe:</label>
-        <input type="password" id="pwd" name="pwd" required>
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" name="password" required>
         <br>
         <input type="submit" name="login" value="Se connecter">
     </form>

@@ -1,14 +1,14 @@
 <?php
 
-    namespace Login\Controllers;
+    namespace Login\src\Models;
 
-    require_once('../src/models/Database.php');
+    require_once('./src/models/Database.php');
 
-    use Login\Lib\DataBase\DatabaseConnection;
+    use Login\src\Models\DatabaseConnection;
 
     class Account
     {
-        public int $guid;
+        public string $guid;
 
         public string $password;
 
@@ -16,11 +16,9 @@
 
         public DatabaseConnection $database;
 
-        public function __construct($guid, $password, $salt, $database)
+        public function __construct($password, $database)
         {
-            $this->guid = $guid;
             $this->password = $password;
-            $this->salt = $salt;
             $this->database = $database;
         }
 
@@ -29,7 +27,7 @@
             return $this->database;
         }
 
-        public function getGuid(): int
+        public function getGuid(): string
         {
             return $this->guid;
         }
@@ -44,7 +42,7 @@
             return $this->salt;
         }
 
-        public function setGuid(int $guid): void
+        public function setGuid(string $guid): void
         {
             $this->guid = $guid;
         }
@@ -61,43 +59,43 @@
             return $guid;
         }
 
-        public function getPasswordFromGuid(int $guid): string
+        public function generateSalt(): string
         {
-            $query = $this->database->prepare('SELECT password FROM account WHERE guid = :guid');
+            $salt = random_bytes(32);
+
+            return $salt;
+        }
+
+        public function getPasswordFromGuid(string $guid): string
+        {
+            $query = $this->database->getConnection()->prepare('SELECT password FROM account WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
-            $password = $query->fetch
-            $password = $password['password'];
+            $password = $query->fetch();
 
-            return $password;
+            return $password['password'];
         
         }
 
-        public function addAccount(int $guid, string $password, string $salt ): void 
+        public function addAccount(string  $guid, string $password, string $salt ): void 
         {
-            // Trouver une solution pour éviter ça
-            $salt = password_get_info($password)['salt'];
-            //
-            $query = $database->prepare('INSERT INTO account (guid, password, salt) VALUES (:guid, :password, :salt)');
+            $query = $this->database->getConnection()->prepare('INSERT INTO account (guid, password, salt) VALUES (:guid, :password, :salt)');
             $query->bindParam(':guid', $guid);
             $query->bindParam(':password', $password);
             $query->bindParam(':salt', $salt);
             $query->execute();
         }
 
-        public function deleteAccount(int $guid): void 
+        public function deleteAccount(string $guid): void 
         {
-            $query = $database->prepare('DELETE FROM account WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('DELETE FROM account WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->execute();
         }
 
-        public function updatePassword(int $guid, string $password, string $salt): void 
+        public function updatePassword(string $guid, string $password, string $salt): void 
         {
-            // Trouver une solution pour éviter ça
-            $salt = password_get_info($password)['salt'];
-            //
-            $query = $database->prepare('UPDATE account SET password = :password, salt = :salt WHERE guid = :guid');
+            $query = $this->database->getConnection()->prepare('UPDATE account SET password = :password, salt = :salt WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
             $query->bindParam(':password', $password);
             $query->bindParam(':salt', $salt);
@@ -106,22 +104,23 @@
 
         public function securizePassword(string $password): string
         {
-            $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 1000]);
+            $password = hash('sha512', $password);
             return $password;
 
         }
 
         public function isPassword(string $password, string $input_password): bool
         {
-            if (password_verify($input_password, $password)) {
+            if (hash('sha512',$input_password) === $password) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        public function verifPasswordStrengh(string $password) : bool
-            if (strlen($password) < 12) {
+        public function verifPasswordStrength(string $password) : bool
+        {
+            if (strlen($password) < 8){
                 return false;
             } if (!preg_match("#[a-z]#", $password)) {
                     return false;
@@ -135,6 +134,5 @@
                                 return true;
                             }
                         }
-        }
-
+                    }
     ?>

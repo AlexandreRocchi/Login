@@ -6,9 +6,9 @@
     require_once('./src/models/User.php');
     require_once('./src/models/Account.php');
 
-    use Login\Lib\DataBase\DatabaseConnection;
-    use Login\Lib\Models\User;
-    use Login\Lib\Models\Account;
+    use Login\src\DataBase\DatabaseConnection;
+    use Login\src\models\User;
+    use Login\src\Models\Account;
 
     class PasswordController 
     {

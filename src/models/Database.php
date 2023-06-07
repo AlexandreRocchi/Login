@@ -1,6 +1,6 @@
 <?php
 
-    namespace Login\Lib\DataBase;
+    namespace Login\src\Models;
     
     class DatabaseConnection
     {
