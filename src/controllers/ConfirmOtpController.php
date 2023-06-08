@@ -12,9 +12,10 @@
 
     class ConfirmOtpController 
     {
+
         public function confirmOtp() 
         {
-            
+            require_once('./views/ConfirmOtp.php');
         }
     }
 ?>

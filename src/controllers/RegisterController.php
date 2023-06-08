@@ -13,8 +13,11 @@
     class RegisterController
     {
         
-        public function register() {
+        public function register() 
+        {
+
             require_once('./views/Register.php');
+            
             if (isset($_POST['register'])) {
                 $email = $_POST['email'];
                 $password = $_POST['password'];

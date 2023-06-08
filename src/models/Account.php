@@ -51,6 +51,11 @@
             $this->password = $password;
         }
 
+        public function setSalt(string $salt): void
+        {
+            $this->salt = $salt;
+        }
+
         public function generateGuid(): int
         {
             $guid = com_create_guid();
@@ -119,7 +124,7 @@
 
         public function verifPasswordStrength(string $password) : bool
         {
-            if (strlen($password) < 8){
+            if (strlen($password) < 12){
                 return false;
             } if (!preg_match("#[a-z]#", $password)) {
                     return false;

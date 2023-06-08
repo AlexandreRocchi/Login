@@ -58,6 +58,20 @@
             $query->execute();
         }
 
+        public function debanAccount(string $guid): void
+        {
+            // Selection de l'heure de la dernière tentative de connexion
+            $query = $this->database->getConnection()->prepare('SELECT time FROM accountattempt WHERE guid = :guid ORDER BY time DESC LIMIT 1');
+            $query->bindParam(':guid', $guid);
+            $query->execute();
+            $result = $query->fetch();
+            $time = $result;
+
+            if ($time < date("Y-m-d H:i:s" ,strtotime('+2 hours -2 minutes')))  {
+                $this->resetAttempt($guid);
+            }
+        }   
+
         public function isBruteForce(string $guid): bool
         {
             $query = $this->database->getConnection()->prepare('SELECT COUNT(*) as attempts FROM accountattempt WHERE guid = :guid');

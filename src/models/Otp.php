@@ -24,7 +24,7 @@
             return $this->database;
         }
 
-        public function getGuid(): int
+        public function getGuid(): string
         {
             return $this->guid;
         }
@@ -34,7 +34,7 @@
             return $this->otp;
         }
 
-        public function setGuid(int $guid): void
+        public function setGuid(string $guid): void
         {
             $this->guid = $guid;
         }
@@ -46,12 +46,12 @@
 
         public function generateOtp(): string
         {
-            $otp = random_bytes(8);
+            $otp = rand(100000, 999999);
 
             return $otp;
         }
 
-        public function getOtpFromGuid(int $guid): string
+        public function getOtpFromGuid(string $guid): string
         {
             $query = $this->database->getConnection()->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
             $query->bindParam(':guid', $guid);
@@ -61,29 +61,46 @@
 
             return $otp['otp'];
         }
-        public function insertOtp(): void
+
+        public function insertOtp(string $guid, string $otp): void
         {
-            $query = $this->database->getConnection()->prepare('INSERT INTO accountotp (guid, otp) VALUES (:guid, :otp)');
-            $query->bindParam(':guid', $this->guid);
-            $query->bindParam(':otp', $this->otp);
+            $otp = hash('sha512', $otp);
+            $query = $this->database->getConnection()->prepare('INSERT INTO accountotp (guid, otp, validity) VALUES (:guid, :otp, NOW() + INTERVAL 5 MINUTE)');
+            $query->bindParam(':guid', $guid);
+            $query->bindParam(':otp', $otp);
             $query->execute();
         }
 
-        public function displayOtp(): void
+        public function deleteOtp(string $guid): void
         {
-            $query = $this->database->getConnection()->prepare('SELECT otp FROM accountotp WHERE guid = :guid');
-            $query->bindParam(':guid', $this->guid);
+            $query = $this->database->getConnection()->prepare('DELETE FROM accountotp WHERE guid = :guid');
+            $query->bindParam(':guid', $guid);
             $query->execute();
+        }
 
-            $otp = $query->fetch();
-
-            // Remplace maladroitement PHP mailer
+        public function displayOtp(string $otp): void
+        {
+            // Remplace  PHP mailer
             echo '<script type="text/javascript">
             var token = "'. $otp .'";
-            if (window.confirm(token)) {
-                window.location.href = "Confirm.php";
+            window.alert("Votre code de confitmation : " + token);
+            window.location.href = "reset-password";
+        </script>';
+        }
+
+        public function verifOtp(string $guid, string $otp): bool
+        {
+            $query = $this->database->getConnection()->prepare('SELECT otp FROM accountotp WHERE guid = :guid ORDER BY validity DESC LIMIT 1');
+            $query->bindParam(':guid', $guid);
+            $query->execute();
+
+            $otp_verif = $query->fetch();
+
+            if ($otp_verif['otp'] === hash('sha512', $otp)) {
+                return true;
+            } else {
+                return false;
             }
-            </script>';
         }
     }
 
