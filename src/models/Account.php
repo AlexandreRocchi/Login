@@ -65,7 +65,7 @@
 
         public function generateSalt(): string
         {
-            $salt = random_bytes(32);
+            $salt = bin2hex(random_bytes(16));
 
             return $salt;
         }

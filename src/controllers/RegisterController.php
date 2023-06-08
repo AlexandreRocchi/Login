@@ -19,46 +19,46 @@
             require_once('./views/Register.php');
             
             if (isset($_POST['register'])) {
-                $email = $_POST['email'];
-                $password = $_POST['password'];
-                // Trouve une solution
-                $guid = "";
-                $salt = "";
-                
+
                 $database = new DatabaseConnection();
 
-                $user = new User($email, $database);
+                $user = new User($database);
                 $account = new Account($database);
+                
+                $hashedPassword = $_POST['hashed-password'];
+                echo $hashedPassword;
 
-                $guid = $user->generateGuid();
-                $salt = $account->generateSalt();
+                $user->setEmail($_POST['email']);
+                $account->setPassword($_POST['password']);
+                $user->setGuid($user->generateGuid());
+                $account->setSalt($account->generateSalt());
 
-                if ($user->isGuid($guid) === true) {
+                if ($user->isGuid($user->getGuid()) === true) {
                      echo "Erreur lors de la génération du compte !";
                      return;
                 }
 
-                if ($user->isEmail($email) === true) {
+                if ($user->isEmail($user->getEmail()) === true) {
                     echo "Adresse e-mail déja utilisé !";
                     return;
                 }
 
-                if ($user->verifEmail($email) === false) {
+                if ($user->verifEmail($user->getEmail()) === false) {
                     echo "Adresse e-mail invalide !";
                     return;
                 }
 
-                if ($account->verifPasswordStrength($password) === false) {
+                if ($account->verifPasswordStrength($account->getPassword()) === false) {
                     echo "Mot de passe trop faible !";
                     return;
                 } else {
-                    $password = $account->securizePassword($password);
+                    $account->setPassword($account->securizePassword($account->getPassword()));
                 }
 
-                $user->adduser($guid, $email);
-                $account->addaccount($guid, $password, $salt);
+                $user->adduser($user->getGuid(), $user->getEmail());
+                $account->addaccount($user->getGuid(), $account->getPassword(), $account->getSalt());
                     
-                header('Location: login');
+                // header('Location: login');
             }        
         }
     }

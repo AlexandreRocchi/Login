@@ -20,23 +20,22 @@
         public function login() {
             require_once('./views/Login.php');
 
-            if (isset($_POST['login'])) {
-
-                $email = $_POST['email'];
-                $password = $_POST['password'];
-                
+            if (isset($_POST['login'])) {                
                 $database = new DatabaseConnection();
                 $database->getConnection();
 
-                $user = new User($email, $database);
+                $user = new User($database);
                 $account = new Account($database);
                 $attempt = new Attempt($database);
 
-                if ($user->isEmail($email) === false) {
+                $user->setEmail($_POST['email']);
+                $account->setPassword($_POST['password']);
+
+                if ($user->isEmail($user->getEmail()) === false) {
                     echo "Adresse e-mail invalide !";
                     return;
                 } else {
-                    $user->setGuid($user->getGuidFromEmail($email));
+                    $user->setGuid($user->getGuidFromEmail($user->getEmail()));
                 }
 
                 $attempt->debanAccount($user->getGuid());
@@ -46,15 +45,15 @@
                     return;
                 }
 
-                if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()),$password) === false) {
+                if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword()) === false) {
                     echo "Mot de passe invalide !";
                     $attempt->addAttempt($user->getGuid());
                     return;
                     } else {
                         $attempt->resetAttempt($user->getGuid());
-                        $_SESSION['email'] = $email;
+                        $_SESSION['email'] = $user->getEmail();
                         $_SESSION['guid'] = $user->getGuid();
-                        echo "Connexion réussie !";
+
                         header('Location: account');
                     }
                 }

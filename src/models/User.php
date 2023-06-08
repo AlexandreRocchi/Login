@@ -14,9 +14,8 @@
 
         public DatabaseConnection $database;
 
-        public function __construct($email, $database)
+        public function __construct($database)
         {
-            $this->email = $email;
             $this->database = $database;
         }
 

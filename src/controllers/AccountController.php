@@ -27,9 +27,10 @@
                 $database = new DatabaseConnection();
                 $database->getConnection();
 
-                $user = new User($email, $database);
+                $user = new User($database);
                 $account = new Account($database);
 
+                $user->setEmail($_SESSION['email']);
                 $user->setGuid($user->getGuidFromEmail($email));
 
                 $user->deleteUser($email);

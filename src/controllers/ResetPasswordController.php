@@ -17,8 +17,6 @@
         {
             require_once('./views/ResetPassword.php');
 
-
-            
             if (isset($_POST['reset-password'])) {
                 $password = $_POST['password'];
                 $confirmPassword = $_POST['confirm-password'];
