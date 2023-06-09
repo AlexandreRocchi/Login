@@ -6,8 +6,7 @@
 
     use Login\src\Models\DatabaseConnection;
 
-    class User
-    {
+    class User {
         public string $guid;
 
         public string $email;
