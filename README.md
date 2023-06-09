@@ -13,6 +13,7 @@ Ce projet est un système de login sécurisé réalisé par moi-même. Il compre
 Vous trouverez dans le fichier SQL deux fichiers :
 1. le fichier db.sql qui permet de créer la base de donnée.
 2. le fichier user.sql qui permet de créer un utilisateur pour la base de donnée.
+3. changer username et password dans Databse.php afin de se connecter à la BDD
 
 ! Attention ! Il faut d'abord générer le script de db.sql puis celui de user.sql .
 
