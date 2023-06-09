@@ -13,50 +13,65 @@
     use Login\src\Models\User;
     use Login\src\Models\Account;
     use Login\src\Models\Attempt;
+    use Exception;
 
-    class LoginController
-    {
+    class LoginController {
         
         public function login() {
-            require_once('./views/Login.php');
+            try {
+                if (isset($_POST['login'])) {
+                    // On instancie les classes DatabaseConnectionn, User, Account et Attempt
+                    $database = new DatabaseConnection();
+                    $user = new User($database);
+                    $account = new Account($database);
+                    $attempt = new Attempt($database);
 
-            if (isset($_POST['login'])) {                
-                $database = new DatabaseConnection();
-                $database->getConnection();
+                    // On récupère les données du formulaire
+                    $user->setEmail($_POST['email']);
+                    $account->setPassword($_POST['password']);
 
-                $user = new User($database);
-                $account = new Account($database);
-                $attempt = new Attempt($database);
-
-                $user->setEmail($_POST['email']);
-                $account->setPassword($_POST['password']);
-
-                if ($user->isEmail($user->getEmail()) === false) {
-                    echo "Adresse e-mail invalide !";
-                    return;
-                } else {
-                    $user->setGuid($user->getGuidFromEmail($user->getEmail()));
-                }
-
-                $attempt->debanAccount($user->getGuid());
-
-                if ($attempt->isBruteForce($user->getGuid()) === true) {
-                    echo "Trop de tentatives de connexion !";
-                    return;
-                }
-
-                if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword(), $account->getSaltFromGuid($user->getGuid())) === false) {
-                    echo "Mot de passe invalide !";
-                    $attempt->addAttempt($user->getGuid());
-                    return;
+                    // On vérifie si l'email existe dans la base de données
+                    if ($user->isEmail($user->getEmail()) === false) {
+                        throw new Exception("Adressse mail invalide !");
                     } else {
-                        $attempt->resetAttempt($user->getGuid());
-                        $_SESSION['email'] = $user->getEmail();
-                        $_SESSION['guid'] = $user->getGuid();
+                        // On récupère le guid avec l'email de l'utilisateur
+                        $user->setGuid($user->getGuidFromEmail($user->getEmail()));
+                    }
 
-                        header('Location: account');
+                    // On lance la fonction de débannissement de l'utilisateur
+                    $attempt->debanAccount($user->getGuid());
+
+                    // On vérifie si l'utilisateur à dépassé le nombre de tentative de connexion
+                    if ($attempt->isBruteForce($user->getGuid()) === true) {
+                        throw new Exception("Compte bloqué !");
+                    }
+                    // On vérifie si le mot de passe est valide
+                    if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword(), $account->getSaltFromGuid($user->getGuid())) === false) {
+                        throw new Exception("Mot de passe invalide !");
+                        // Si l'utlisateur n'a pas mis le bon mot de passe, on ajoute une tentative de connexion
+                        $attempt->addAttempt($user->getGuid());
+                        return;
+                        } else {
+                            // On reset le nombre de tentative de connexion et on stocke l'email et le guid dans des variables de session
+                            $attempt->resetAttempt($user->getGuid());
+                            $_SESSION['email'] = $user->getEmail();
+                            $_SESSION['guid'] = $user->getGuid();
+
+                            // On redirige l'utilisateur vers la page de son compte
+                            header('Location: account');
+                        }
+                    }
+                    else {
+                        throw new Exception("Veuillez remplir tous les champs.");
                     }
                 }
+                // On récupère les exceptions et on les affiche
+                catch (Exception $e) {
+                    $error =  $e->getMessage();
+                }
+
+                // On affiche la page de connexion
+                require_once('./views/Login.php');   
             }
         }
 ?>

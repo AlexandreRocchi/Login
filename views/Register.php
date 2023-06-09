@@ -17,7 +17,7 @@
     </form>
     <p>Déjà inscrit ? <a href="/Login/index.php/login">Connectez-vous</a></p>
     <p>Attention ! Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre, un caractère spécial et faire au moins 12 caractères.</p>
-    <p id="output">Qualité du mot de passe :</p>
+    <p id="output"></p>
     <?php if (isset($error)) { ?>
         <p><?= $error ?></p>
     <?php } ?>

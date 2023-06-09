@@ -1,9 +1,7 @@
 <?php
-
     namespace Login\src\Models;
     
-    class DatabaseConnection
-    {
+    class DatabaseConnection {
         public ?\PDO $database = null;
 
         // Crée une connexion à la base de données

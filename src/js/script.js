@@ -4,7 +4,7 @@ function prepareForm(event) {
     const form = event.target;
     const password = form.password.value;
     if (verifPasswordStrength(password) == false) {
-        document.getElementById('output').innerHTML = "Qualité du mot de passe : trop faible";
+        document.getElementById('output').innerHTML = "Mot de passe trop faible !";
         return;
     } else {
         sha512(password).then(hash => {

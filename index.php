@@ -1,57 +1,49 @@
 <?php
 
-// Inclure les fichiers des contrôleurs
 require_once './src/controllers/RegisterController.php';
 require_once './src/controllers/LoginController.php';
 require_once './src/controllers/AccountController.php';
 require_once './src/controllers/ResetPasswordController.php';
-
 
 use Login\Controllers\RegisterController;
 use Login\Controllers\LoginController;
 use Login\Controllers\AccountController;
 use Login\Controllers\ResetPasswordController;
 
-
-
-// Instancier les contrôleurs
+// On instancie les contrôleurs
 $registerController = new RegisterController();
 $loginController = new LoginController();
 $accountController = new AccountController();
 $passwordController = new ResetPasswordController();
 
-
-
-
-// Obtenir le chemin demandé dans l'URL
+// On récupère le chemin de la requête
 $path = $_SERVER['REQUEST_URI'];
 
-// Aiguiller les requêtes en fonction du chemin
+// On redirige vers les routes correspondantes
 switch ($path) {
 
-    // Routes pour le contrôleur AccountController
+    // Route pour le contrôleur AccountController
     case '/Login/index.php/account':
         $accountController->session();
         break;
 
-    // Routes pour le contrôleur LoginController
+    // Route pour le contrôleur LoginController
     case '/Login/index.php/login':
         $loginController->login();
         break;
-
+    // Route pour le contrôleur RegisterController
     case '/Login/index.php/register':
         $registerController->register();
         break;
 
-    // Routes pour le contrôleur PasswordController
+    // Route pour le contrôleur PasswordController
     case '/Login/index.php/reset-password':
         $passwordController->resetPassword();
         break;
 
-
+    // Chemin pour les routes non définies
     default:
         echo 'Erreur 404';
-        // Gérer les routes non définies
         break;
 }
 ?>

@@ -15,5 +15,8 @@
         <input type="submit" name="login" value="Se connecter">
     </form>
     <p>Pas encore inscrit ? <a href="/Login/index.php/register">Inscrivez-vous</a></p>
+    <?php if (isset($error)) { ?>
+        <p><?= $error ?></p>
+    <?php } ?>
 </body>
 </html>

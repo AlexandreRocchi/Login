@@ -9,43 +9,51 @@
     use Login\src\Models\DatabaseConnection;
     use Login\src\Models\User;
     use Login\src\Models\Account;
+    use Exception;
 
-    class AccountController 
-    {
+    class AccountController {
         public function session() {
-            if (isset($_SESSION['email'])) {
-                echo "Bienvenue sur votre compte " . $_SESSION['email'] . " !";
-                $email = $_SESSION['email'];
-                require_once('./views/Session.php');
-            } else {
-                header('Location: login');
-            }
+                if (isset($_SESSION['email'])) {
+                    // On personalise le message de bienvenue
+                    echo 'Bienvenue ' . $_SESSION['email'];
 
-            if (isset($_POST['delete'])) {
-                $email = $_SESSION['email'];
+                    // On affiche la page de session
+                    require_once('./views/Session.php'); 
+                } else {
+                    // On redirige vers la page de connexion les utilisateurs non connectés
+                    header('Location: login');
+                }
+                if (isset($_POST['delete'])) {
+                    // On instancie les classes DatabaseConnection, User et Account
+                    $database = new DatabaseConnection();
+                    $user = new User($database);
+                    $account = new Account($database);
 
-                $database = new DatabaseConnection();
-                $database->getConnection();
+                    // On récupère l'email de l'utilisateur connecté
+                    $user->setEmail($_SESSION['email']);
 
-                $user = new User($database);
-                $account = new Account($database);
+                    // On récupère le guid de l'utilisateur connecté grâce à son email
+                    $user->setGuid($user->getGuidFromEmail($email));
 
-                $user->setEmail($_SESSION['email']);
-                $user->setGuid($user->getGuidFromEmail($email));
+                    // On supprime l'utilisateur et son compte ainsi que sa session
+                    $user->deleteUser($email);
+                    $account->deleteAccount($user->getGuid());
+                    session_destroy();
 
-                $user->deleteUser($email);
-                $account->deleteAccount($user->getGuid());
-                session_destroy();
-                header('Location: login');
-            }
+                    // On redirige vers la page de connexion
+                    header('Location: login');
+                } 
 
-            if (isset($_POST['logout'])) {
-                session_destroy();
-                header('Location: login');
-             }
-            if (isset($_POST['reset'])) {
-                header('Location: reset-password');
-            }
-            }
+                if (isset($_POST['logout'])) {
+                    // On supprime la session de l'utilisateur
+                    session_destroy();
+                    // On redirige vers la page de connexion
+                    header('Location: login');
+                }
+                if (isset($_POST['reset'])) {
+                    // On redirige vers la page de réinitialisation de mot de passe
+                    header('Location: reset-password');
+                }           
         }
+    }
 ?>
