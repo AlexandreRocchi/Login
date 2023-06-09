@@ -9,15 +9,14 @@
     use Login\src\Models\DatabaseConnection;
     use Login\src\Models\Account;
     use Login\src\Models\Otp;
+    use Exception;
 
     class ResetPasswordController 
     {
 
         public function resetPassword() 
         {
-
-                require_once('./views/ResetPassword.php');
-
+            try {
                 if (isset($_POST['reset-password']) && isset($_SESSION['guid'])) {
                     // On récupère les données du formulaire
                     $confirmPassword = $_POST['confirm-password'];
@@ -34,22 +33,19 @@
                     
                     // On vérifie si l'ancien mot de passe est correct
                     if ($account->isPassword($account->getPasswordFromGuid($account->getGuid()),$old_password, $account->getSaltFromGuid($account->getGuid())) === false) {
-                        echo "Ancien mot de passe invalide !";
-                        return;
+                        throw new Exception("L'ancien mot de passe est incorrect !");
                     }
 
                     // On vérifie si le nouveau mot de passe n'a pas déjà été utilisé
                     if ($old_password === $account->getPassword()) {
-                        echo "Votre nouveau mot de passe a déjà été utilisé sur ce compte !";
-                        return;
+                        throw new Exception("Le nouveau mot de passe à déjà été utilisé sur ce compte !");
                     }
 
                     // On vérifie si les mots de passe correspondent
                     if ($account->getPassword() === $confirmPassword) {
                         // On vérifie si le nouveau mot de passe est assez sécurisé
                         if ($account->verifPasswordStrength($account->getPassword()) === false) {
-                            echo "Votre nouveau mot de passe n'est pas assez sécurisé !";
-                            return;
+                            throw new Exception("Le nouveau mot de passe n'est pas assez sécurisé !");
                         } else {
                             // On stocke le nouveau mot de passe dans la session
                             $_SESSION['password'] = $account->getPassword();
@@ -72,8 +68,7 @@
                         }
                     } else {
                         // On affiche un message d'erreur
-                        echo "Les mots de passe ne correspondent pas !";
-                        return;
+                        throw new Exception("Les mots de passe ne correspondent pas !");
                     }
                     }
                 if (isset($_POST['confirm-otp'])) {
@@ -86,8 +81,7 @@
 
                     // On vérifie si le code de vérification est correct
                     if ($otp->verifOtp($account->getGuid(), $_POST['otp']) === false) {
-                        echo "Le code de vérification est incorrect !";
-                        return;
+                        throw new Exception("Le code de vérification est incorrect !");
                     } else {
 
                         // On récupère le mot de passe de la session
@@ -109,10 +103,16 @@
                         $otp->deleteOtp($_SESSION['guid']);
 
                         // On affiche un message de succès
-                        echo "Votre mot de passe a bien été modifié !";
-                        return;
+                        throw new Exception("Le mot de passe à bien été modifié !");
                     }
                 }
+            }
+            // On récupère les exceptions et on les affiche
+            catch (Exception $e) {
+                $error =  $e->getMessage();
+            }
+            // On affiche la page d'inscription
+            require_once('./views/ResetPassword.php'); 
             }
         }
 ?>

@@ -47,10 +47,11 @@
                     }
                     // On vérifie si le mot de passe est valide
                     if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword(), $account->getSaltFromGuid($user->getGuid())) === false) {
-                        throw new Exception("Mot de passe invalide !");
                         // Si l'utlisateur n'a pas mis le bon mot de passe, on ajoute une tentative de connexion
                         $attempt->addAttempt($user->getGuid());
-                        return;
+                        
+                        throw new Exception("Mot de passe invalide !");
+                    
                         } else {
                             // On reset le nombre de tentative de connexion et on stocke l'email et le guid dans des variables de session
                             $attempt->resetAttempt($user->getGuid());

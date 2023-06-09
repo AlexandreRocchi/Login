@@ -1,7 +1,3 @@
-GRANT USAGE ON *.* TO `login`@`localhost`;
-
-GRANT ALL PRIVILEGES ON `users`.* TO `login`@`localhost`;
-
 CREATE DATABASE IF NOT EXISTS `users`;
 
 USE `users`;

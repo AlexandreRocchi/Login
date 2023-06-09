@@ -33,10 +33,10 @@
                     $user->setEmail($_SESSION['email']);
 
                     // On récupère le guid de l'utilisateur connecté grâce à son email
-                    $user->setGuid($user->getGuidFromEmail($email));
+                    $user->setGuid($user->getGuidFromEmail($_SESSION['email']));
 
                     // On supprime l'utilisateur et son compte ainsi que sa session
-                    $user->deleteUser($email);
+                    $user->deleteUser($_SESSION['email']);
                     $account->deleteAccount($user->getGuid());
                     session_destroy();
 
