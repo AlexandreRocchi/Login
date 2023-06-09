@@ -13,7 +13,8 @@ Ce projet est un système de login sécurisé réalisé par moi-même. Il compre
 Vous trouverez dans le fichier SQL deux fichiers :
 1. le fichier db.sql qui permet de créer la base de donnée.
 2. le fichier user.sql qui permet de créer un utilisateur pour la base de donnée.
-! Attention ! Il faut d'abord générer le script de db.sql puis celui de user.sql
+
+! Attention ! Il faut d'abord générer le script de db.sql puis celui de user.sql .
 
 
 ## Utilisation
