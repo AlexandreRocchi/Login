@@ -7,7 +7,7 @@
         // Crée une connexion à la base de données
         public function getConnection(): \PDO {
             if ($this->database === null) {
-                $this->database = new \PDO('mysql:host=localhost;dbname=users', 'root', '');
+                $this->database = new \PDO('mysql:host=localhost;dbname=users', 'username', 'password');
             }
     
             return $this->database;
