@@ -18,6 +18,9 @@
         <input type="submit" name="reset-password" value="Confirmer">
     </form>
     <p>Attention ! Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre, un caractère spécial et faire au moins 12 caractères.</p>
+    <?php if (isset($error)) { ?>
+        <p><?= $error ?></p>
+    <?php } ?>
     <form method="POST" action="">
         <label for="password">Confirmer le changement de mot de passe avec votre code de confirmation:</label>
         <br>

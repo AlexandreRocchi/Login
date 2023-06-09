@@ -21,5 +21,12 @@
     <?php if (isset($error)) { ?>
         <p><?= $error ?></p>
     <?php } ?>
+    <form method="POST" action="">
+        <label for="password">Confirmer la création de compte avec votre code de confirmation:</label>
+        <br>
+        <input type="password" id="opt" name="otp">
+        <br>
+        <input type="submit" name="confirm-otp" value="Confirmer">
+    </form>
 </body>
 </html>

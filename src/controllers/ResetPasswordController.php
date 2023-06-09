@@ -64,7 +64,7 @@
                             $otp->insertOtp($otp->getGuid(), $otp->getOtp());
 
                             // On affiche le code de vérification
-                            $otp->displayOtp($otp->getOtp());
+                            $otp->displayOtp($otp->getOtp(),'reset-password');
 
                             
                             // header('Location: reset-password');
@@ -75,9 +75,6 @@
                         echo "Les mots de passe ne correspondent pas !";
                         return;
                     }
-
-                    } else {
-                        // header('Location: login');
                     }
                 if (isset($_POST['confirm-otp'])) {
                     // On instancie les classes DatabaseConnection, Account et Otp
@@ -103,6 +100,7 @@
                         $account->setPassword($account->securizePassword($account->getPassword()));
                         $account->setPassword($account->saltPassword($account->getPassword(), $account->getSalt()));
                         $account->setPassword($account->securizePassword($account->getPassword()));
+
 
                         // On met à jour le mot de passe dans la base de données
                         $account->updatePassword($account->getGuid(), $account->getPassword(), $account->getSalt());

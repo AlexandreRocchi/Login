@@ -74,12 +74,12 @@
         }
 
         // On affiche l'otp pour l'utilisateur
-        public function displayOtp(string $otp): void {
+        public function displayOtp(string $otp, string $path): void {
             // Remplace PHP mailer
             echo '<script type="text/javascript">
             var token = "'. $otp .'";
             window.alert("Votre code de confitmation : " + token);
-            window.location.href = "reset-password";
+            window.location.href = "'.$path.'";
         </script>';
         }
 
