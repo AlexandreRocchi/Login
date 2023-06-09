@@ -7,6 +7,7 @@ Ce projet est un système de login sécurisé réalisé par moi-même. Il compre
 1. Assurez-vous d'avoir installé WampServer et MySQL sur votre machine.
 2. Clonez ce projet dans le répertoire www de votre serveur Wamp.
 3. Importez le fichier de base de données fourni dans votre gestionnaire de base de données (par exemple, PhpMyAdmin).
+4. Si vous télécharger le code depuis Github, assurez vous de renommez Login-Main en Login si besoin.
 
 ## La base de donnée
 
