@@ -17,7 +17,7 @@
         {
             require_once('./views/ResetPassword.php');
 
-            if (isset($_POST['reset-password'])) {
+            if (isset($_POST['reset-password']) && isset($_SESSION['guid'])) {
                 $password = $_POST['password'];
                 $confirmPassword = $_POST['confirm-password'];
                 $old_password = $_POST['old-password'];
@@ -32,20 +32,19 @@
                 
                 $old_password_verif = $account->getPasswordFromGuid($guid);
 
+                if ($account->isPassword($old_password_verif,$old_password, $account->getSaltFromGuid($account->getGuid())) === false) {
+                    echo "Ancien mot de passe invalide !";
+                    return;
+                } 
                 if ($old_password === $password) {
                     echo "Votre nouveau mot de passe a déjà été utilisé sur ce compte !";
                     return;
                 }
-                if ($account->isPassword($old_password_verif,$old_password) === false) {
-                    echo "Mot de passe invalide !";
-                    return;
-                } 
                 if ($password === $confirmPassword) {
                     if ($account->verifPasswordStrength($password) === false) {
-                        echo "Votre nouveau mot de passe n'est pas valide !";
+                        echo "Votre nouveau mot de passe n'est pas assez sécurisé !";
                         return;
                     } else {
-
                         $_SESSION['password'] = $password;
 
                         $otp->setGuid($guid);
@@ -62,6 +61,8 @@
                     return;
                 }
 
+                } else {
+                    header('Location: login');
                 }
             if (isset($_POST['confirm-otp'])) {
                 $input_otp = $_POST['otp'];

@@ -51,13 +51,6 @@
             $query->execute();
         }
 
-        public function resetAttempt(string $guid): void
-        {
-            $query = $this->database->getConnection()->prepare('DELETE FROM accountattempt WHERE guid = :guid');
-            $query->bindParam(':guid', $guid);
-            $query->execute();
-        }
-
         public function debanAccount(string $guid): void
         {
             // Selection de l'heure de la dernière tentative de connexion
@@ -66,11 +59,21 @@
             $query->execute();
             $result = $query->fetch();
             $time = $result;
-
-            if ($time < date("Y-m-d H:i:s" ,strtotime('+2 hours -2 minutes')))  {
+            
+            if (empty($time)) {
+                return;
+            }
+            if ($time['time'] < date("Y-m-d H:i:s" ,strtotime('+2 hours -2 minutes')))  {
                 $this->resetAttempt($guid);
             }
         }   
+
+        public function resetAttempt(string $guid): void
+        {
+            $query = $this->database->getConnection()->prepare('DELETE FROM accountattempt WHERE guid = :guid');
+            $query->bindParam(':guid', $guid);
+            $query->execute();
+        }
 
         public function isBruteForce(string $guid): bool
         {

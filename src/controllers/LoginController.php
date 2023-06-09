@@ -45,7 +45,7 @@
                     return;
                 }
 
-                if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword()) === false) {
+                if ($account->isPassword($account->getPasswordFromGuid($user->getGuid()), $account->getPassword(), $account->getSaltFromGuid($user->getGuid())) === false) {
                     echo "Mot de passe invalide !";
                     $attempt->addAttempt($user->getGuid());
                     return;

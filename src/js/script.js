@@ -1,24 +1,21 @@
-document.querySelector('form').addEventListener('submit', function (event) {
-    event.preventDefault(); // Empêche le rechargement de la page après la soumission du formulaire
-    var passwordInput = document.getElementById('password');
-    var password = passwordInput.value;
-    var texte = document.getElementById('output');
-
-    if (!verifPasswordStrength(password)) {
-        texte.innerHTML = 'Qualité du mot de passe : Trop faible';
+function prepareForm(event) {
+    console.log('prepareForm');
+    event.preventDefault();
+    const form = event.target;
+    const password = form.password.value;
+    if (verifPasswordStrength(password) == false) {
+        document.getElementById('output').innerHTML = "Qualité du mot de passe : trop faible";
         return;
-    }
-    texte.innerHTML = 'Qualité du mot de passe : Convenable';
-    sha512(password)
-        .then(function (result) {
-            document.getElementById('hashed-password').value = result;
+    } else {
+        sha512(password).then(hash => {
+            form.password.value = hash;
+            form.submit();
         })
-        .catch(function (error) {
-            console.error(error);
-        });
-});
-
-
+            .catch(error => {
+                console.log(error);
+            });
+    }
+}
 
 function sha512(str) {
     var encoder = new TextEncoder();
@@ -54,3 +51,6 @@ function verifPasswordStrength(password) {
     }
     return true;
 }
+
+const form = document.getElementById('form');
+form.addEventListener('submit', prepareForm);

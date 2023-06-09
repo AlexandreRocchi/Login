@@ -81,7 +81,17 @@
         
         }
 
-        public function addAccount(string  $guid, string $password, string $salt ): void 
+        public function getSaltFromGuid(string $guid): string 
+        {
+            $query = $this->database->getConnection()->prepare('SELECT salt FROM account WHERE guid = :guid');
+            $query->bindParam(':guid', $guid);
+            $query->execute();
+            $salt = $query->fetch();
+
+            return $salt['salt'];
+        }
+
+        public function addAccount(string  $guid, string $password, string $salt): void 
         {
             $query = $this->database->getConnection()->prepare('INSERT INTO account (guid, password, salt) VALUES (:guid, :password, :salt)');
             $query->bindParam(':guid', $guid);
@@ -106,6 +116,12 @@
             $query->execute();
         }
 
+        public function saltPassword(string $password, string $salt): string
+        {
+            $password = hash('sha512', $password . $salt);
+            return $password;
+        }
+
         public function securizePassword(string $password): string
         {
             $password = hash('sha512', $password);
@@ -113,9 +129,9 @@
 
         }
 
-        public function isPassword(string $password, string $input_password): bool
+        public function isPassword(string $password, string $input_password, string $salt): bool
         {
-            if (hash('sha512',$input_password) === $password) {
+            if (hash('sha512',hash('sha512',hash('sha512',$input_password) . $salt)) === $password) {
                 return true;
             } else {
                 return false;
